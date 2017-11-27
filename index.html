@@ -23,16 +23,26 @@
 $(function(){
 
 	var socket = io();
+
+	socket.on('message', function(data){
+		data = JSON.parse(data);
+		$('#messages').append('<li>' + data.id + '&nbsp;wrote:&nbsp;' + data.message + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</li>');
+	});
+
+
 	$('form').submit(function(){
-		socket.emit('chat message', $('#m').val());
+		var data = {
+			id: socket.id,
+			message: $('#m').val(),
+			type: 'userMessage'
+		};
+		socket.send(JSON.stringify(data));
 		$('#m').val('');
 		return false;
 	});
+
 	
-	socket.on('chat message', function(msg){
-		$('#messages').append($('<li>').text(msg));
-	});
-});
+}); // end jQuery
 </script>
 
 	<ul id="messages"></ul>
