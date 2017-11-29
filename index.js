@@ -2,9 +2,17 @@ var express   =  require('express');
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var bodyParser = require('body-parser');
+
+var recastai = require('recastai').default;
+
+var build = new recastai.build('TOKEN', 'de');
 
 var people = {};
 
+app.use(bodyParser.json());
+
+app.use('/stylesheets', express.static(__dirname + '/stylesheets')); // let express use static directories on a GET request: https://stackoverflow.com/questions/5924072/express-js-cant-get-my-static-files-why#5924732 
 
 
 app.get('/', function(req, res) {
@@ -12,10 +20,11 @@ app.get('/', function(req, res) {
 	console.log("GET index.html");
 });
 
-app.use('/stylesheets', express.static(__dirname + '/stylesheets')); // let express use static directories on a GET request: https://stackoverflow.com/questions/5924072/express-js-cant-get-my-static-files-why#5924732 
 
-
-
+build.dialog({ type: 'text', content: 'ich möchte einen flug buchen'}, { conversationId: '22' })
+  .then(function(res) {
+    console.log(res)
+});
 
 
 io.on('connection', function(socket){
