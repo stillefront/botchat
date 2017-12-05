@@ -21,15 +21,10 @@ app.get('/', function(req, res) {
 });
 
 
-build.dialog({ type: 'text', content: 'ich möchte einen flug buchen'}, { conversationId: '22' })
-  .then(function(res) {
-    console.log(res)
-});
 
 
 io.on('connection', function(socket){
 	console.log(socket.id + ' connected'); //for debuging in console
-
 	
 	socket.on('disconnect', function(){
 	console.log('user disconnected');	
@@ -37,13 +32,36 @@ io.on('connection', function(socket){
 
 		socket.on('message', function(message){
 		message = JSON.parse(message);
-		if(message.type == "userMessage"){
+			socket.send(people[socket.id], JSON.stringify(message)); // send to chat
 			socket.broadcast.send(people[socket.id], JSON.stringify(message));
-			message.type = "myMessage";
-			socket.send(people[socket.id], JSON.stringify(message));
 
-			}
-		console.log(people[socket.id] + ' wrote: ' + message.message); // debug incoming messages	
+
+			build.dialog({ type: 'text', content: message.content}, { conversationId: socket.id }) // send to bot
+  			.then(function(res) {
+    			console.log(res)
+    			var content = res.messages[0].content;
+    			var type = res.messages[0].type;
+    			var id_bot = res.nlp.uuid;
+
+    			console.log(content + ' ' + type + ' ' + id_bot); //debug botmessage
+
+    			var botdata = {
+    			content : res.messages[0].content,
+    			type : res.messages[0].type
+    			};
+
+    			socket.send(id_bot , JSON.stringify(botdata)); // let bot respond
+    			socket.broadcast.send(id_bot , JSON.stringify(botdata)); // let bot respond
+			})
+
+			.catch(function(err){
+				console.error('ERROR: ', err)
+			});
+
+
+			
+			
+		console.log(people[socket.id] + ' wrote: ' + message.content); // debug incoming messages	
 		});
 
 		socket.on("set_name", function(data){
