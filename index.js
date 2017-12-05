@@ -6,7 +6,9 @@ var bodyParser = require('body-parser');
 
 var recastai = require('recastai').default;
 
-var build = new recastai.build('TOKEN', 'de');
+var build = new recastai.build('0e804b207bb77410a806a83ae1ef219a', 'de');
+
+var build_2 = new recastai.build('55055ed53033a4801c4f2477dc98d30e', 'de');
 
 var people = {};
 
@@ -40,14 +42,15 @@ io.on('connection', function(socket){
   			.then(function(res) {
     			console.log(res)
     			var content = res.messages[0].content;
-    			var type = res.messages[0].type;
+    			// var type = res.messages[0].type;
+    			var type = 'botAnswer';
     			var id_bot = res.nlp.uuid;
 
     			console.log(content + ' ' + type + ' ' + id_bot); //debug botmessage
 
     			var botdata = {
     			content : res.messages[0].content,
-    			type : res.messages[0].type
+    			type : type
     			};
 
     			socket.send(id_bot , JSON.stringify(botdata)); // let bot respond
@@ -70,6 +73,40 @@ io.on('connection', function(socket){
 
 			socket.emit('name_set', people[socket.id]);			
 		});
+
+
+		// experimental
+
+		socket.on("callOtherBot", function(data){
+
+			message = JSON.parse(data);
+
+			build_2.dialog({ type: 'text', content: message.content}, { conversationId: '22'}) // send to bot
+  			.then(function(res) {
+    			console.log(res)
+    			var content = res.messages[0].content;
+    			// var type = res.messages[0].type;
+    			var type = 'botAnswer';
+    			var id_bot = res.nlp.uuid;
+
+    			console.log(content + ' ' + type + ' ' + id_bot); //debug botmessage
+
+    			var botdata = {
+    			content : res.messages[0].content,
+    			type : type
+    			};
+
+    			socket.send(id_bot , JSON.stringify(botdata)); // let bot respond
+    			socket.broadcast.send(id_bot , JSON.stringify(botdata)); // let bot respond
+			})
+
+			.catch(function(err){
+				console.error('ERROR: ', err)
+			});
+
+		});
+
+		 // experimental end */
 	
 	});
 

@@ -18,6 +18,15 @@ $(function(){
 	socket.on('message', function(who, data){
 		data = JSON.parse(data);
 		$('#messages').append('<li>' + who + '&nbsp;wrote:&nbsp;' + data.content + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</li>');
+
+
+		// experimental bot conversation
+		if (data.type == 'botAnswer') {
+			setTimeout(function(){socket.emit("callOtherBot", JSON.stringify(data))}, 3000);
+		};
+		// experimental end
+
+		
 	});
 
 
