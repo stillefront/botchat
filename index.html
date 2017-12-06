@@ -22,11 +22,14 @@ $(function(){
 
 		// experimental bot conversation
 		if (data.type == 'botAnswer') {
-			setTimeout(function(){socket.emit("callOtherBot", JSON.stringify(data))}, 3000);
+			socket.emit("callSecondBot", JSON.stringify(data))
+		};
+		if (data.type == 'botAnswer2') {
+			socket.emit("callFirstBot", JSON.stringify(data))
 		};
 		// experimental end
 
-		
+
 	});
 
 

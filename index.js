@@ -77,11 +77,42 @@ io.on('connection', function(socket){
 
 		// experimental
 
-		socket.on("callOtherBot", function(data){
+		socket.on("callSecondBot", function(data){
 
 			message = JSON.parse(data);
 
 			build_2.dialog({ type: 'text', content: message.content}, { conversationId: '22'}) // send to bot
+  			.then(function(res) {
+    			console.log(res)
+    			var content = res.messages[0].content;
+    			// var type = res.messages[0].type;
+    			var type = 'botAnswer2';
+    			var id_bot = res.nlp.uuid;
+
+    			console.log(content + ' ' + type + ' ' + id_bot); //debug botmessage
+
+    			var botdata = {
+    			content : res.messages[0].content,
+    			type : type
+    			};
+
+    			socket.send(id_bot , JSON.stringify(botdata)); // let bot respond
+    			socket.broadcast.send(id_bot , JSON.stringify(botdata)); // let bot respond
+			})
+
+			.catch(function(err){
+				console.error('ERROR: ', err)
+			});
+
+		});
+
+
+
+		socket.on("callFirstBot", function(data){
+
+			message = JSON.parse(data);
+
+			build.dialog({ type: 'text', content: message.content}, { conversationId: '21'}) // send to bot
   			.then(function(res) {
     			console.log(res)
     			var content = res.messages[0].content;
