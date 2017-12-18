@@ -3,7 +3,9 @@
 	"version": "0.0.1",
 	"description": "fingeruebung mit socket.io und node.js",
 	"dependencies": {
+		"body-parser": "^1.18.2",
 		"express": "^4.15.2",
+		"recastai": "^3.7.0",
 		"socket.io": "^2.0.4"
 	}
 }

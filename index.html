@@ -17,14 +17,26 @@ $(function(){
 
 	socket.on('message', function(who, data){
 		data = JSON.parse(data);
-		$('#messages').append('<li>' + who + '&nbsp;wrote:&nbsp;' + data.message + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</li>');
+		$('#messages').append('<li>' + who + '&nbsp;wrote:&nbsp;' + data.content + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</li>');
+
+
+		// experimental bot conversation
+		if (data.type == 'botAnswer') {
+			socket.emit("callSecondBot", JSON.stringify(data))
+		};
+		if (data.type == 'botAnswer2') {
+			socket.emit("callFirstBot", JSON.stringify(data))
+		};
+		// experimental end
+
+
 	});
 
 
 	$('form').submit(function(){
 		var data = {
 			id: socket.id,
-			message: $('#m').val(),
+			content: $('#m').val(),
 			type: 'userMessage'
 		};
 		socket.send(JSON.stringify(data)); //socket.send sends messages which are received with the 'message' event
