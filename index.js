@@ -1,14 +1,19 @@
-var express   =  require('express');
+var express = require('express');
 var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var http = require('http');
+var app = express();
+var server = http.createServer(app);
+
+
+
+var io = require('socket.io').listen(server);
 var bodyParser = require('body-parser');
 
 var recastai = require('recastai').default;
 
-var build = new recastai.build('0e804b207bb77410a806a83ae1ef219a', 'de');
+// var build = new recastai.build(token1 , 'de');
 
-var build_2 = new recastai.build('55055ed53033a4801c4f2477dc98d30e', 'de');
+// var build_2 = new recastai.build('55055ed53033a4801c4f2477dc98d30e', 'de');
 
 var people = {};
 
@@ -67,11 +72,31 @@ io.on('connection', function(socket){
 		console.log(people[socket.id] + ' wrote: ' + message.content); // debug incoming messages	
 		});
 
-		socket.on("set_name", function(data){
+		/*socket.on("set_name", function(data){
 			people[socket.id] = data;
 			console.log(people[socket.id]);
 
 			socket.emit('name_set', people[socket.id]);			
+		});*/
+
+		socket.on("set_name", function(data){
+			names = JSON.parse(data);
+			people[socket.id] = names.name;
+			var token1 = (names.token1);
+			var token2 = (names.token2);
+
+
+			console.log('chosen nick: ' + people[socket.id]);
+			console.log('token # 1: ' + token1);
+			console.log('token # 2: ' + token2);
+			//var build = new recastai.build(token1, 'de');
+
+			socket.emit('name_set', people[socket.id]);	
+
+			// two new bot objects!
+
+			build = new recastai.build(token1, 'de');  //  
+			build_2 = new recastai.build(token2, 'de');		// 
 		});
 
 
@@ -143,6 +168,6 @@ io.on('connection', function(socket){
 
 
 
-http.listen(3000, function(){
+server.listen(3000, function(){
 	console.log('listening on *:3000');
 });

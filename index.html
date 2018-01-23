@@ -46,7 +46,12 @@ $(function(){
 
 
 	$('#setname').click(function(){
-		socket.emit("set_name", $('#nickname').val())
+		var data = {
+			token1: $('#bot1').val(),
+			token2: $('#bot2').val(),
+			name: $('#nickname').val()
+		};
+		socket.emit("set_name", JSON.stringify(data));
 	});
 
 
@@ -64,11 +69,14 @@ $(function(){
 	<section id="nameform">
 		<div class="backdrop"></div>
 		<div class="popup">
-			<div class="pophead">Bitte Nicknamen eingeben:</div>
+			<div class="pophead">Bitte Tokens und Nicknamen eingeben:</div>
 			<div class="popbody">
-				<input id="nickname" type="text"/>
-				<input id="setname" type="button" value="bestätigen">
+				token#1: <input id="bot1" type="text"/><br>
+				token#2: <input id="bot2" type="text"/><br>
+				name: <input id="nickname" type="text"/>
+				<input id="setname" type="button" value="best&auml;tigen">
 			</div>
+			
 		</div>
 	</section>
 
