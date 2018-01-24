@@ -6,38 +6,65 @@
 }
       
 body {
-	font: 13px Helvetica, Arial;
+	margin: 5%;
+  	font-family: 'Open Sans', 'sans-serif';
+  	font-size: 1rem;
 }
 
 form {
-	background: #000; 
 	padding: 3px; 
-	position: fixed; 
+	position: relative; 
 	bottom: 0; 
 	width: 100%;
 }
 
 form input { 
-	border: 0; 
+	border: 1px;
+	border-style: solid;
+	border-radius: 5px;
+	border-color: #DCDCDC;
 	padding: 10px; 
 	width: 80%; 
 	margin-right: .5%;
 }
 
 form button {
-	width: 9%; 
+	width: 7%; 
 	background-color: #4192C1;
 	color: #FFFFFF;
 	font-weight: bold; 
-	border: none; 
+	border: none;
+	border-radius: 5px; 
 	padding: 10px;
 }
+
+#stop {
+	width: 7%; 
+	background-color: #BC2237;
+	color: #FFFFFF;
+	font-weight: bold; 
+	border: none;
+	border-radius: 5px; 
+	padding: 10px;
+}
+
+#setname {
+	width: auto; 
+	background-color: #4192C1;
+	color: #FFFFFF;
+	font-weight: bold; 
+	border: none;
+	border-radius: 5px; 
+	padding: 10px;
+	margin-top: 2%;
+}
+
 
 #messages {
 	list-style-type: none; 
 	margin: 0; 
 	padding: 0;
-	height: 500px;
+	height: 700px;
 	overflow: auto;
 }
 
@@ -46,13 +73,40 @@ form button {
 	height: auto;
 	width: 60%; 
 	float: left;
+	margin: 2%;
+  	border-radius: 5px;
+	background: #E6FDC5;
+	color: #000000;
+	border:1px;
+	border-style: solid;
+	border-color: #76E55D;
 }
 
 #messages p:nth-child(odd) {
-	background: #eee;
+	margin: auto;
+  	border-radius: 5px;
+	background: #FFFFFF;
+	color: #000000;
+	border:1px;
+	border-color: #DCDCDC;
+	border-style: solid;
 	float : right; 
 }
 
+#sysmessage {
+	padding: 5px 10px;
+	height: auto;
+	width: 60%; 
+	text-align: center;
+	float: center;
+	margin: 2%;
+  	border-radius: 5px;
+	background: #C6D2FF;
+	color: #000000;
+	border:1px;
+	border-style: solid;
+	border-color: #3D4B7F;
+}
 
 
 // chose nickname
@@ -66,9 +120,9 @@ form button {
 }
 
 .popup {
-	position: absolute;
+	position: relative;
 	height: 100px;
-	width: 300px;
+	width: 400px;
 	left: -moz-calc(50% - 150px);
 	left: -webkit-calc(50% - 150px);
 	left: calc(50% - 150px);
@@ -81,11 +135,13 @@ form button {
 .pophead {
 	background-color: #4192C1;
 	color: #FFFFFF;
-	font-weight: bold;
 	padding: 8px 3px;
+	border-radius: 5px; 
 	vertical-align: middle;
+	text-align: center;
 }
 
 .popbody {
 	padding: 10px 5px;
+	text-align: center;
 }

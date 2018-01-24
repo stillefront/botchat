@@ -2,79 +2,15 @@
 <html>
 
 <head>
-	<title>Socket.IO chat</title>
+	<title>chatBotchat – welcome</title>
 	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
 </head>
 
 <body>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-<script>
-$(function(){
-
-	var socket = io();
-
-
-	socket.on('message', function(who, data){
-		data = JSON.parse(data);
-		$('#messages').append('<p>' + who + '&nbsp;wrote:&nbsp;' + data.content + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</p>');
-
-
-
-		// experimental bot conversation
-		if (data.type == 'botAnswer') {
-			setTimeout(function(){
-			socket.emit("callSecondBot", JSON.stringify(data))}, 3000 //short timeout for realism ;)
-			);
-		};
-		if (data.type == 'botAnswer2') {
-			setTimeout(function(){
-			socket.emit("callFirstBot", JSON.stringify(data))}, 3000
-			);
-		};
-		// experimental end
-
-		//scroll smoothly to bottom after every message
-
-		$('#messages').stop().animate({
-  			scrollTop: $('#messages')[0].scrollHeight
-		}, 800);
-
-
-	});
-
-
-	$('form').submit(function(){
-		var data = {
-			id: socket.id,
-			content: $('#m').val(),
-			type: 'userMessage'
-		};
-		socket.send(JSON.stringify(data)); //socket.send sends messages which are received with the 'message' event
-		$('#m').val('');
-		return false;
-	});
-
-
-	$('#setname').click(function(){
-		var data = {
-			token1: $('#bot1').val(),
-			token2: $('#bot2').val(),
-			name: $('#nickname').val()
-		};
-		socket.emit("set_name", JSON.stringify(data));
-	});
-
-
-	socket.on('name_set', function(who){
-		$('#nameform').hide();
-		$('#messages').append('<li>' + 'Hallo '+ who + '&nbsp;!' + '</li>');
-	});
-
-	
-}); // end jQuery
-</script>
+<script  type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script  type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script  type="text/javascript" src="/scripts/main.js"></script>
 
 <!--- choose nickname ---->
 
@@ -83,29 +19,25 @@ $(function(){
 		<div class="popup">
 			<div class="pophead">Bitte Tokens und Nicknamen eingeben:</div>
 			<div class="popbody">
-				token#1: <input id="bot1" type="text"/><br>
-				token#2: <input id="bot2" type="text"/><br>
-				name: <input id="nickname" type="text"/>
-				<input id="setname" type="button" value="best&auml;tigen">
+				name bot #1: <input id="namebot1" type="text"/><br>
+				token bot #1: <input id="bot1" type="text"/><br> <br>
+				name bot #2: <input id="namebot2" type="text"/><br>
+				token bot #2: <input id="bot2" type="text"/><br> <br>
+				eigener name: <input id="nickname" type="text"/><br>
+				<input id="setname" type="button" value="go for it!">
 			</div>
 			
 		</div>
 	</section>
 
 <!--- chat window ---->
-
+<div id="chat">
 	<div id="messages"></div>
 		<form action="">
 			<input id="m" autocomplete="off"/><button>Send</button>
+			<input id="stop" type="button" value="STOP!">
 		</form>
-
-<script type="text/javascript">
-	$(function(){
-		var myDiv = $("#messages");
-		myDiv.animate({ scrollTop: myDiv.attr("scrollHeight") - myDiv.height() }, 3000);
-	});
-</script>
-
+</div>
 
 </body>
 </html>

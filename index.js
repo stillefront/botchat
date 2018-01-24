@@ -16,7 +16,7 @@ var people = {};
 app.use(bodyParser.json());
 
 app.use('/stylesheets', express.static(__dirname + '/stylesheets')); // let express use static directories on a GET request: https://stackoverflow.com/questions/5924072/express-js-cant-get-my-static-files-why#5924732 
-
+app.use('/scripts', express.static(__dirname + '/scripts'));
 
 app.get('/', function(req, res) {
 	res.sendFile(__dirname + '/index.html');
@@ -43,7 +43,6 @@ io.on('connection', function(socket){
   			.then(function(res) {
     			console.log(res)
     			var content = res.messages[0].content;
-    			// var type = res.messages[0].type;
     			var type = 'botAnswer';
     			var id_bot = res.nlp.uuid;
 
@@ -54,7 +53,7 @@ io.on('connection', function(socket){
     			type : type
     			};
 
-    			socket.send(id_bot , JSON.stringify(botdata)); // let bot respond
+    			socket.send(namebot1 , JSON.stringify(botdata)); // let bot respond
     			socket.broadcast.send(id_bot , JSON.stringify(botdata)); // let bot respond
 			})
 
@@ -74,6 +73,8 @@ io.on('connection', function(socket){
 			people[socket.id] = names.name;
 			var token1 = (names.token1);
 			var token2 = (names.token2);
+			namebot1 = (names.namebot1);
+			namebot2 = (names.namebot2);
 
 
 			console.log('chosen nick: ' + people[socket.id]);
@@ -100,7 +101,6 @@ io.on('connection', function(socket){
   			.then(function(res) {
     			console.log(res)
     			var content = res.messages[0].content;
-    			// var type = res.messages[0].type;
     			var type = 'botAnswer2';
     			var id_bot = res.nlp.uuid;
 
@@ -111,8 +111,8 @@ io.on('connection', function(socket){
     			type : type
     			};
 
-    			socket.send(id_bot , JSON.stringify(botdata)); // let bot respond
-    			socket.broadcast.send(id_bot , JSON.stringify(botdata)); // let bot respond
+    			socket.send(namebot2 , JSON.stringify(botdata)); // let bot respond
+    			socket.broadcast.send(namebot2 , JSON.stringify(botdata)); // let bot respond
 			})
 
 			.catch(function(err){
@@ -131,7 +131,6 @@ io.on('connection', function(socket){
   			.then(function(res) {
     			console.log(res)
     			var content = res.messages[0].content;
-    			// var type = res.messages[0].type;
     			var type = 'botAnswer';
     			var id_bot = res.nlp.uuid;
 
@@ -142,8 +141,8 @@ io.on('connection', function(socket){
     			type : type
     			};
 
-    			socket.send(id_bot , JSON.stringify(botdata)); // let bot respond
-    			socket.broadcast.send(id_bot , JSON.stringify(botdata)); // let bot respond
+    			socket.send(namebot1 , JSON.stringify(botdata)); // let bot respond
+    			socket.broadcast.send(namebot1 , JSON.stringify(botdata)); // let bot respond
 			})
 
 			.catch(function(err){
