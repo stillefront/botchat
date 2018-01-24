@@ -15,19 +15,31 @@ $(function(){
 
 	var socket = io();
 
+
 	socket.on('message', function(who, data){
 		data = JSON.parse(data);
-		$('#messages').append('<li>' + who + '&nbsp;wrote:&nbsp;' + data.content + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</li>');
+		$('#messages').append('<p>' + who + '&nbsp;wrote:&nbsp;' + data.content + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</p>');
+
 
 
 		// experimental bot conversation
 		if (data.type == 'botAnswer') {
-			socket.emit("callSecondBot", JSON.stringify(data))
+			setTimeout(function(){
+			socket.emit("callSecondBot", JSON.stringify(data))}, 3000 //short timeout for realism ;)
+			);
 		};
 		if (data.type == 'botAnswer2') {
-			socket.emit("callFirstBot", JSON.stringify(data))
+			setTimeout(function(){
+			socket.emit("callFirstBot", JSON.stringify(data))}, 3000
+			);
 		};
 		// experimental end
+
+		//scroll smoothly to bottom after every message
+
+		$('#messages').stop().animate({
+  			scrollTop: $('#messages')[0].scrollHeight
+		}, 800);
 
 
 	});
@@ -82,10 +94,18 @@ $(function(){
 
 <!--- chat window ---->
 
-	<ul id="messages"></ul>
+	<div id="messages"></div>
 		<form action="">
 			<input id="m" autocomplete="off"/><button>Send</button>
 		</form>
+
+<script type="text/javascript">
+	$(function(){
+		var myDiv = $("#messages");
+		myDiv.animate({ scrollTop: myDiv.attr("scrollHeight") - myDiv.height() }, 3000);
+	});
+</script>
+
 
 </body>
 </html>

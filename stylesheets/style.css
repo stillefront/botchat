@@ -20,7 +20,7 @@ form {
 form input { 
 	border: 0; 
 	padding: 10px; 
-	width: 90%; 
+	width: 80%; 
 	margin-right: .5%;
 }
 
@@ -37,15 +37,23 @@ form button {
 	list-style-type: none; 
 	margin: 0; 
 	padding: 0;
+	height: 500px;
+	overflow: auto;
 }
 
-#messages li {
-	padding: 5px 10px; 
+#messages p {
+	padding: 5px 10px;
+	height: auto;
+	width: 60%; 
+	float: left;
 }
 
-#messages li:nth-child(odd) {
-	background: #eee; 
+#messages p:nth-child(odd) {
+	background: #eee;
+	float : right; 
 }
+
+
 
 // chose nickname
 

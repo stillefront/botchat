@@ -11,10 +11,6 @@ var bodyParser = require('body-parser');
 
 var recastai = require('recastai').default;
 
-// var build = new recastai.build(token1 , 'de');
-
-// var build_2 = new recastai.build('55055ed53033a4801c4f2477dc98d30e', 'de');
-
 var people = {};
 
 app.use(bodyParser.json());
@@ -72,12 +68,6 @@ io.on('connection', function(socket){
 		console.log(people[socket.id] + ' wrote: ' + message.content); // debug incoming messages	
 		});
 
-		/*socket.on("set_name", function(data){
-			people[socket.id] = data;
-			console.log(people[socket.id]);
-
-			socket.emit('name_set', people[socket.id]);			
-		});*/
 
 		socket.on("set_name", function(data){
 			names = JSON.parse(data);
