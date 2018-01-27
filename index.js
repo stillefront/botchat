@@ -39,17 +39,25 @@ io.on('connection', function(socket){
 			socket.broadcast.send(people[socket.id], JSON.stringify(message));
 
 
-			build.dialog({ type: 'text', content: message.content}, { conversationId: socket.id }) // send to bot
+			build.dialog({ type: 'text', content: message.content}, { conversationId: people[socket.id] }) // send to bot
   			.then(function(res) {
-    			console.log(res)
-    			var content = res.messages[0].content;
+    			// console.log(res)
+    			var msg = [];
+    			for (var i = 0; i < res.messages.length; i++) {
+    				msg[i] = res.messages[i].content; 	
+    			}
+    			console.log('content: ', msg);
+
+    			var content = msg.join('<br>');
+
+
     			var type = 'botAnswer';
     			var id_bot = res.nlp.uuid;
 
-    			console.log(content + ' ' + type + ' ' + id_bot); //debug botmessage
+    			//console.log(content + ' ' + type + ' ' + id_bot); //debug botmessage
 
     			var botdata = {
-    			content : res.messages[0].content,
+    			content : content,
     			type : type
     			};
 
@@ -97,17 +105,24 @@ io.on('connection', function(socket){
 
 			message = JSON.parse(data);
 
-			build_2.dialog({ type: 'text', content: message.content}, { conversationId: '22'}) // send to bot
+			build_2.dialog({ type: 'text', content: message.content}, { conversationId: people[socket.id] }) // send to bot
   			.then(function(res) {
-    			console.log(res)
-    			var content = res.messages[0].content;
+    			// console.log(res)
+    			var msg = [];
+    			for (var i = 0; i < res.messages.length; i++) {
+    				msg[i] = res.messages[i].content; 	
+    			}
+    			console.log('content: ', msg);
+
+    			var content = msg.join('<br>');
+
     			var type = 'botAnswer2';
     			var id_bot = res.nlp.uuid;
 
-    			console.log(content + ' ' + type + ' ' + id_bot); //debug botmessage
+    			// console.log(content + ' ' + type + ' ' + id_bot); //debug botmessage
 
     			var botdata = {
-    			content : res.messages[0].content,
+    			content : content,
     			type : type
     			};
 
@@ -127,20 +142,27 @@ io.on('connection', function(socket){
 
 			message = JSON.parse(data);
 
-			build.dialog({ type: 'text', content: message.content}, { conversationId: '21'}) // send to bot
+			build.dialog({ type: 'text', content: message.content}, { conversationId: people[socket.id]}) // send to bot
   			.then(function(res) {
-    			console.log(res)
-    			var content = res.messages[0].content;
+    			// console.log(res)
+    			var msg = [];
+    			for (var i = 0; i < res.messages.length; i++) {
+    				msg[i] = res.messages[i].content; 	
+    			}
+    			console.log('content: ', msg);
+
+    			var content = msg.join('<br>');
+
+
     			var type = 'botAnswer';
     			var id_bot = res.nlp.uuid;
 
-    			console.log(content + ' ' + type + ' ' + id_bot); //debug botmessage
+    			//console.log(content + ' ' + type + ' ' + id_bot); //debug botmessage
 
     			var botdata = {
-    			content : res.messages[0].content,
+    			content : content,
     			type : type
     			};
-
     			socket.send(namebot1 , JSON.stringify(botdata)); // let bot respond
     			socket.broadcast.send(namebot1 , JSON.stringify(botdata)); // let bot respond
 			})

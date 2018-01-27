@@ -6,8 +6,20 @@ $(document).ready(function(){
 
 	socket.on('message', function(who, data){
 		data = JSON.parse(data);
-		$('#messages').append('<p>' + who + '&nbsp;wrote:&nbsp;' + '<br>' + data.content + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</p>');
 
+		//$('#messages').append('<p>' + who + '&nbsp;wrote:&nbsp;' + '<br>' + data.content + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</p>');
+
+
+		if (data.type == 'botAnswer') {
+			$('#messages').append('<p class="bot1message">' + who + '&nbsp;wrote:&nbsp;' + '<br>' + data.content + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</p>');
+
+		} else if (data.type == 'botAnswer2') {
+			$('#messages').append('<p class="bot2message">' + who + '&nbsp;wrote:&nbsp;' + '<br>' + data.content + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</p>');
+		} else {
+			$('#messages').append('<p>' + who + '&nbsp;wrote:&nbsp;' + '<br>' + data.content + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</p>');
+		};
+
+		
 
 
 		// experimental bot conversation
@@ -46,6 +58,7 @@ $(document).ready(function(){
 
 
 	$('#stop').click(function(){
+		$('#messages').append('<p class="sysmessage">' + 'Verbindung getrennt. ' + '</p>');
 		socket.disconnect(); // disconnect and stop chat!
 
 	});
@@ -66,7 +79,7 @@ $(document).ready(function(){
 	socket.on('name_set', function(who){
 		$('#nameform').hide();
 		$('#chat').show();
-		$('#messages').append('<li id="sysmessage">' + 'Willkommen im chatbotchat, '+ who + '&nbsp;!' + '</li>');
+		$('#messages').append('<p class="sysmessage">' + 'Willkommen im chatbotchat, '+ who + '&nbsp;!' + '</p>');
 	});
 
 	

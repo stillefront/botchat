@@ -82,7 +82,7 @@ form button {
 	border-color: #76E55D;
 }
 
-#messages p:nth-child(odd) {
+#messages p.bot1message {
 	margin: auto;
   	border-radius: 5px;
 	background: #FFFFFF;
@@ -93,7 +93,37 @@ form button {
 	float : right; 
 }
 
-#sysmessage {
+#bot1message {
+	margin: auto;
+  	border-radius: 5px;
+	background: #FFFFFF;
+	color: #000000;
+	border:1px;
+	border-color: #DCDCDC;
+	border-style: solid;
+	float : right; 
+}
+
+
+#messages p.bot2message {
+	padding: 5px 10px;
+	height: auto;
+	width: 60%; 
+	float: left;
+	margin: 2%;
+  	border-radius: 5px;
+	background: #E6FDC5;
+	color: #000000;
+	border:1px;
+	border-style: solid;
+	border-color: #76E55D;
+}
+
+
+
+
+
+#messages p.sysmessage {
 	padding: 5px 10px;
 	height: auto;
 	width: 60%; 
