@@ -13,6 +13,9 @@ var recastai = require('recastai').default;
 
 var people = {};
 
+var bot_1 = {};
+var bot_2 = {};
+
 app.use(bodyParser.json());
 
 app.use('/stylesheets', express.static(__dirname + '/stylesheets')); // let express use static directories on a GET request: https://stackoverflow.com/questions/5924072/express-js-cant-get-my-static-files-why#5924732 
@@ -27,7 +30,15 @@ app.get('/', function(req, res) {
 
 
 io.on('connection', function(socket){
-	console.log(socket.id + ' connected'); //for debuging in console
+	
+
+	// experimental
+	var room = ('room_' + socket.id); // generate dynamic room name
+	socket.join(room);
+
+	console.log(socket.id + ' connected to room ' + room ); //for debuging in console
+
+	// experimental end
 	
 	socket.on('disconnect', function(){
 	console.log('user disconnected');	
@@ -35,11 +46,11 @@ io.on('connection', function(socket){
 
 		socket.on('message', function(message){
 		message = JSON.parse(message);
-			socket.send(people[socket.id], JSON.stringify(message)); // send to chat
-			socket.broadcast.send(people[socket.id], JSON.stringify(message));
+			socket.emit('message', people[socket.id], JSON.stringify(message)); // send to client
+			socket.to(room).emit('message',people[socket.id], JSON.stringify(message)); // send to room
 
 
-			build.dialog({ type: 'text', content: message.content}, { conversationId: people[socket.id] }) // send to bot
+			bot_1[socket.id].dialog({ type: 'text', content: message.content}, { conversationId: people[socket.id] }) // send to bot
   			.then(function(res) {
     			// console.log(res)
     			var msg = [];
@@ -54,15 +65,13 @@ io.on('connection', function(socket){
     			var type = 'botAnswer';
     			var id_bot = res.nlp.uuid;
 
-    			//console.log(content + ' ' + type + ' ' + id_bot); //debug botmessage
-
     			var botdata = {
     			content : content,
     			type : type
     			};
 
-    			socket.send(namebot1 , JSON.stringify(botdata)); // let bot respond
-    			socket.broadcast.send(id_bot , JSON.stringify(botdata)); // let bot respond
+    			socket.emit('message', namebot1 , JSON.stringify(botdata)); // let bot respond in client
+    			socket.to(room).emit('message', id_bot , JSON.stringify(botdata)); // let bot respond to room
 			})
 
 			.catch(function(err){
@@ -72,7 +81,7 @@ io.on('connection', function(socket){
 
 			
 			
-		console.log(people[socket.id] + ' wrote: ' + message.content); // debug incoming messages	
+		console.log(people[socket.id] + ' in room ' + room + ' wrote: ' + message.content); // debug incoming messages	
 		});
 
 
@@ -94,18 +103,21 @@ io.on('connection', function(socket){
 
 			// two new bot objects!
 
-			build = new recastai.build(token1, 'de');  //  
-			build_2 = new recastai.build(token2, 'de');		// 
+
+
+			bot_1[socket.id] = new recastai.build(token1, 'de');  //
+			console.log(bot_1[socket.id]);
+
+			bot_2[socket.id] = new recastai.build(token2, 'de');  //
+			console.log(bot_2[socket.id]); 
 		});
 
-
-		// experimental
 
 		socket.on("callSecondBot", function(data){
 
 			message = JSON.parse(data);
 
-			build_2.dialog({ type: 'text', content: message.content}, { conversationId: people[socket.id] }) // send to bot
+			bot_2[socket.id].dialog({ type: 'text', content: message.content}, { conversationId: people[socket.id] }) // send to bot
   			.then(function(res) {
     			// console.log(res)
     			var msg = [];
@@ -126,8 +138,8 @@ io.on('connection', function(socket){
     			type : type
     			};
 
-    			socket.send(namebot2 , JSON.stringify(botdata)); // let bot respond
-    			socket.broadcast.send(namebot2 , JSON.stringify(botdata)); // let bot respond
+    			socket.emit('message', namebot2 , JSON.stringify(botdata)); // let bot respond
+    			socket.to(room).emit( 'message', namebot2 , JSON.stringify(botdata)); // let bot respond
 			})
 
 			.catch(function(err){
@@ -142,7 +154,7 @@ io.on('connection', function(socket){
 
 			message = JSON.parse(data);
 
-			build.dialog({ type: 'text', content: message.content}, { conversationId: people[socket.id]}) // send to bot
+			bot_1[socket.id].dialog({ type: 'text', content: message.content}, { conversationId: people[socket.id]}) // send to bot
   			.then(function(res) {
     			// console.log(res)
     			var msg = [];
@@ -163,8 +175,8 @@ io.on('connection', function(socket){
     			content : content,
     			type : type
     			};
-    			socket.send(namebot1 , JSON.stringify(botdata)); // let bot respond
-    			socket.broadcast.send(namebot1 , JSON.stringify(botdata)); // let bot respond
+    			socket.emit('message', namebot1 , JSON.stringify(botdata)); // let bot respond
+    			socket.to(room).emit('message', namebot1 , JSON.stringify(botdata)); // let bot respond
 			})
 
 			.catch(function(err){
@@ -172,8 +184,6 @@ io.on('connection', function(socket){
 			});
 
 		});
-
-		 // experimental end */
 	
 	});
 

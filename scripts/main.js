@@ -3,12 +3,17 @@ $(document).ready(function(){
 	var socket = io();
 	$('#chat').hide();
 
+	var smoothscroll = function(){
+		$('#messages').stop().animate({
+  			scrollTop: $('#messages')[0].scrollHeight
+		}, 800);
+	};
+
 
 	socket.on('message', function(who, data){
 		data = JSON.parse(data);
 
-		//$('#messages').append('<p>' + who + '&nbsp;wrote:&nbsp;' + '<br>' + data.content + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</p>');
-
+		
 
 		if (data.type == 'botAnswer') {
 			$('#messages').append('<p class="bot1message">' + who + '&nbsp;wrote:&nbsp;' + '<br>' + data.content + '&nbsp;(&nbsp;' +  data.type + '&nbsp;)' + '</p>');
@@ -37,9 +42,12 @@ $(document).ready(function(){
 
 		//scroll smoothly to bottom after every message
 
-		$('#messages').stop().animate({
+		
+		smoothscroll();
+
+		/*$('#messages').stop().animate({
   			scrollTop: $('#messages')[0].scrollHeight
-		}, 800);
+		}, 800); */
 
 
 	});
@@ -59,7 +67,10 @@ $(document).ready(function(){
 
 	$('#stop').click(function(){
 		$('#messages').append('<p class="sysmessage">' + 'Verbindung getrennt. ' + '</p>');
+		smoothscroll();
 		socket.disconnect(); // disconnect and stop chat!
+
+		
 
 	});
 
@@ -80,6 +91,8 @@ $(document).ready(function(){
 		$('#nameform').hide();
 		$('#chat').show();
 		$('#messages').append('<p class="sysmessage">' + 'Willkommen im chatbotchat, '+ who + '&nbsp;!' + '</p>');
+		smoothscroll();
+
 	});
 
 	
