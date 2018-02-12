@@ -40,14 +40,8 @@ $(document).ready(function(){
 		};
 		// experimental end
 
-		//scroll smoothly to bottom after every message
-
-		
+		//scroll smoothly to bottom after every message	
 		smoothscroll();
-
-		/*$('#messages').stop().animate({
-  			scrollTop: $('#messages')[0].scrollHeight
-		}, 800); */
 
 
 	});
@@ -55,9 +49,9 @@ $(document).ready(function(){
 
 	$('form').submit(function(){
 		var data = {
-			id: socket.id,
-			content: $('#m').val(),
-			type: 'userMessage'
+			"id": socket.id,
+			"content": $('#m').val(),
+			"type": 'userMessage'
 		};
 		socket.send(JSON.stringify(data)); //socket.send sends messages which are received with the 'message' event
 		$('#m').val('');
@@ -68,6 +62,7 @@ $(document).ready(function(){
 	$('#stop').click(function(){
 		$('#messages').append('<p class="sysmessage">' + 'Verbindung getrennt. ' + '</p>');
 		smoothscroll();
+		
 		socket.disconnect(); // disconnect and stop chat!
 
 		
@@ -77,11 +72,11 @@ $(document).ready(function(){
 
 	$('#setname').click(function(){
 		var data = {
-			token1: $('#bot1').val(),
-			token2: $('#bot2').val(),
-			namebot1: $('#namebot1').val(),
-			namebot2: $('#namebot2').val(),
-			name: $('#nickname').val()
+			"token1": $('#bot1').val(),
+			"token2": $('#bot2').val(),
+			"namebot1": $('#namebot1').val(),
+			"namebot2": $('#namebot2').val(),
+			"name": $('#nickname').val()
 		};
 		socket.emit("set_name", JSON.stringify(data));
 	});
